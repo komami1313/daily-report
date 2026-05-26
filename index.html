@@ -196,11 +196,18 @@
     </div>
     <div class="form-group">
         <label>獲得トーク・事例</label>
-        <select id="cardTalk">
+        <select id="cardTalk" onchange="toggleCustom('card')">
             <option value="">-- 選択してください --</option>
-            <option value="楽天モバイルの月額料金をこのカードで支払うだけで、ポイントがさらに貯まりやすくなりますよ！">ポイント還元：スマホ決済との相性の良さをアピール</option>
-            <option value="新規入会キャンペーンのポイントで、実質数ヶ月分のスマホ代が浮く計算になります！">おトク感：入会特典ポイントのメリット訴求</option>
+            <option value="楽天カード1枚だけ所持と伺ったので、破損や不正利用されてカードが使えなくなった時のリスクを伝え、2枚目の提案をして獲得。">1枚所持のリスク・2枚目提案</option>
+            <option value="楽天カードのデザインを変更希望のお客様に2枚目を提案して獲得。">デザイン変更希望への2枚目提案</option>
+            <option value="今後は楽天市場を利用してみたいと伺ったので、SPUについて説明して獲得。">楽天市場利用希望へのSPU訴求</option>
+            <option value="発行手数料、年会費無料。">発行手数料・年会費無料訴求</option>
+            <option value="FREE">その他（自由入力）</option>
         </select>
+        <div id="cardFreeArea" class="custom-input-area">
+            <label>自由入力欄（カード）</label>
+            <input type="text" id="cardFreeText" placeholder="獲得事例を自由に入力してください">
+        </div>
     </div>
 
     <div class="section-title">▼オプション：かけ放題</div>
@@ -267,12 +274,9 @@
             return;
         }
 
-        // 文字列の検索ミスによるフリーズを100%防ぐための安全な抽出処理
         const getNumFromText = (keyword) => {
             const index = text.indexOf(keyword);
             if (index === -1) return 0;
-            
-            // キーワードの後ろの文字列を切り出して、最初に見つかる数字を取り出す
             const afterText = text.substring(index + keyword.length, index + keyword.length + 30);
             const numMatch = afterText.match(/\d+/);
             return numMatch ? Number(numMatch[0]) : 0;
@@ -298,80 +302,4 @@
         const hikariToday = Number(document.getElementById('hikariToday').value) || 0;
         const turboPrev = Number(document.getElementById('turboPrev').value) || 0;
         const turboToday = Number(document.getElementById('turboToday').value) || 0;
-        const cardPrev = Number(document.getElementById('cardPrev').value) || 0;
-        const cardToday = Number(document.getElementById('cardToday').value) || 0;
-        const kakePrev = Number(document.getElementById('kakePrev').value) || 0;
-        const kakeToday = Number(document.getElementById('kakeToday').value) || 0;
-        const hogoPrev = Number(document.getElementById('hogoPrev').value) || 0;
-        const hogoToday = Number(document.getElementById('hogoToday').value) || 0;
-
-        // トークテキストの取得
-        let hikariText = '';
-        const hikariSel = document.getElementById('hikariTalk');
-        if (hikariSel) {
-            hikariText = (hikariSel.value === 'FREE') ? (document.getElementById('hikariFreeText').value || '(未入力)') : (hikariSel.value || '');
-        }
-
-        let turboText = '';
-        const turboSel = document.getElementById('turboTalk');
-        if (turboSel) {
-            turboText = (turboSel.value === 'FREE') ? (document.getElementById('turboFreeText').value || '(未入力)') : (turboSel.value || '');
-        }
-
-        const cardText = document.getElementById('cardTalk') ? (document.getElementById('cardTalk').value || '') : '';
-        const kakeText = document.getElementById('kakeTalk') ? (document.getElementById('kakeTalk').value || '') : '';
-        const hogoText = document.getElementById('hogoTalk') ? (document.getElementById('hogoTalk').value || '') : '';
-
-        const reportText = '【実績報告】' + dateStr + '\n\n' +
-'▼集客\n' +
-'本日来客数：' + (document.getElementById('visitorCount').value || 0) + '人（' + (document.getElementById('visitorPairs').value || 0) + '組）\n' +
-'∟内既存：' + (document.getElementById('existingCount').value || 0) + '人\n\n' +
-'▼SIM\n' +
-'月間目標：' + (document.getElementById('simTar').value || 0) + '件\n' +
-'月間実績：' + (simPrev + simToday) + '件\n' +
-'本日実績：' + simToday + '件\n\n' +
-'▼オプション\n' +
-'ひかり\n' +
-'・月間目標： ' + (document.getElementById('hikariTar').value || 0) + '件\n' +
-'・月間実績： ' + (hikariPrev + hikariToday) + '件\n' +
-'・本日実績： ' + hikariToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + hikariText + '\n\n' +
-'Turbo\n' +
-'・月間目標： ' + (document.getElementById('turboTar').value || 0) + '件\n' +
-'・月間実績： ' + (turboPrev + turboToday) + '件\n' +
-'・本日実績： ' + turboToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + turboText + '\n\n' +
-'カード\n' +
-'・月間目標： ' + (document.getElementById('cardTar').value || 0) + '件\n' +
-'・月間実績： ' + (cardPrev + cardToday) + '件\n' +
-'・本日実績： ' + cardToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + cardText + '\n\n' +
-'かけ放題\n' +
-'・月間目標： ' + (document.getElementById('kakeTar').value || 0) + '件\n' +
-'・月間実績： ' + (kakePrev + kakeToday) + '件\n' +
-'・本日実績： ' + kakeToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + kakeText + '\n\n' +
-'最強保護\n' +
-'・月間目標： ' + (document.getElementById('hogoTar').value || 0) + '件\n' +
-'・月間実績： ' + (hogoPrev + hogoToday) + '件\n' +
-'・本日実績： ' + hogoToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + hogoText;
-
-        document.getElementById('outputText').innerText = reportText;
-    }
-
-    function copyToClipboard() {
-        const text = document.getElementById('outputText').innerText;
-        navigator.clipboard.writeText(text).then(function() {
-            alert('コピーしました！');
-        });
-    }
-</script>
-
-</body>
-</html>
+        const cardPrev = Number(document.
