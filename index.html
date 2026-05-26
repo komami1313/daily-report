@@ -267,22 +267,23 @@
             return;
         }
 
-        // Androidでも絶対にエラーで止まらない頑丈な抽出処理
-        const extractNum = (regex) => {
-            try {
-                const match = text.match(regex);
-                return match ? (match[1] || 0) : 0;
-            } catch (e) {
-                return 0; // 万が一エラーが起きても0を返して次に進む
-            }
+        // 文字列の検索ミスによるフリーズを100%防ぐための安全な抽出処理
+        const getNumFromText = (keyword) => {
+            const index = text.indexOf(keyword);
+            if (index === -1) return 0;
+            
+            // キーワードの後ろの文字列を切り出して、最初に見つかる数字を取り出す
+            const afterText = text.substring(index + keyword.length, index + keyword.length + 30);
+            const numMatch = afterText.match(/\d+/);
+            return numMatch ? Number(numMatch[0]) : 0;
         };
 
-        document.getElementById('simPrev').value = extractNum(/▼SIM[\s\S]*?月間実績：\s*(\d+)/);
-        document.getElementById('hikariPrev').value = extractNum(/ひかり[\s\S]*?月間実績：\s*(\d+)/);
-        document.getElementById('turboPrev').value = extractNum(/Turbo[\s\S]*?月間実績：\s*(\d+)/);
-        document.getElementById('cardPrev').value = extractNum(/カード[\s\S]*?月間実績：\s*(\d+)/);
-        document.getElementById('kakePrev').value = extractNum(/かけ放題[\s\S]*?月間実績：\s*(\d+)/);
-        document.getElementById('hogoPrev').value = extractNum(/最強保護[\s\S]*?月間実績：\s*(\d+)/);
+        document.getElementById('simPrev').value = getNumFromText('▼SIM');
+        document.getElementById('hikariPrev').value = getNumFromText('ひかり');
+        document.getElementById('turboPrev').value = getNumFromText('Turbo');
+        document.getElementById('cardPrev').value = getNumFromText('カード');
+        document.getElementById('kakePrev').value = getNumFromText('かけ放題');
+        document.getElementById('hogoPrev').value = getNumFromText('最強保護');
 
         alert('前日の実績数値を読み込みました！');
     }
@@ -291,7 +292,6 @@
         const dateInput = new Date(document.getElementById('reportDate').value);
         const dateStr = (dateInput.getMonth() + 1) + '月' + dateInput.getDate() + '日';
 
-        // 各種数値の取得
         const simPrev = Number(document.getElementById('simPrev').value) || 0;
         const simToday = Number(document.getElementById('simToday').value) || 0;
         const hikariPrev = Number(document.getElementById('hikariPrev').value) || 0;
@@ -305,24 +305,23 @@
         const hogoPrev = Number(document.getElementById('hogoPrev').value) || 0;
         const hogoToday = Number(document.getElementById('hogoToday').value) || 0;
 
-        // トーク例の取得
-        const getTalkText = (id) => {
-            const el = document.getElementById(id + 'Talk');
-            if (!el) return '';
-            if (el.value === 'FREE') {
-                const freeEl = document.getElementById(id + 'FreeText');
-                return freeEl ? (freeEl.value || '(未入力)') : '(未入力)';
-            }
-            return el.value || '';
-        };
+        // トークテキストの取得
+        let hikariText = '';
+        const hikariSel = document.getElementById('hikariTalk');
+        if (hikariSel) {
+            hikariText = (hikariSel.value === 'FREE') ? (document.getElementById('hikariFreeText').value || '(未入力)') : (hikariSel.value || '');
+        }
 
-        const hikariText = getTalkText('hikari');
-        const turboText = getTalkText('turbo');
+        let turboText = '';
+        const turboSel = document.getElementById('turboTalk');
+        if (turboSel) {
+            turboText = (turboSel.value === 'FREE') ? (document.getElementById('turboFreeText').value || '(未入力)') : (turboSel.value || '');
+        }
+
         const cardText = document.getElementById('cardTalk') ? (document.getElementById('cardTalk').value || '') : '';
         const kakeText = document.getElementById('kakeTalk') ? (document.getElementById('kakeTalk').value || '') : '';
         const hogoText = document.getElementById('hogoTalk') ? (document.getElementById('hogoTalk').value || '') : '';
 
-        // 日報テキストの組み立て
         const reportText = '【実績報告】' + dateStr + '\n\n' +
 '▼集客\n' +
 '本日来客数：' + (document.getElementById('visitorCount').value || 0) + '人（' + (document.getElementById('visitorPairs').value || 0) + '組）\n' +
