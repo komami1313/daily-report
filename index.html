@@ -251,10 +251,12 @@
     function toggleCustom(id) {
         const select = document.getElementById(id + 'Talk');
         const freeArea = document.getElementById(id + 'FreeArea');
-        if (select.value === 'FREE') {
-            freeArea.style.display = 'block';
-        } else {
-            freeArea.style.display = 'none';
+        if (select && freeArea) {
+            if (select.value === 'FREE') {
+                freeArea.style.display = 'block';
+            } else {
+                freeArea.style.display = 'none';
+            }
         }
     }
 
@@ -286,4 +288,76 @@
         const dateStr = `${dateInput.getMonth() + 1}月${dateInput.getDate()}日`;
 
         const getSum = (prevId, todayId) => {
-            return (Number(document.getElementById(prevId).
+            return (Number(document.getElementById(prevId).value) || 0) + (Number(document.getElementById(todayId).value) || 0);
+        };
+
+        const getTalk = (id) => {
+            const select = document.getElementById(id + 'Talk');
+            if (!select) return '';
+            if (select.value === 'FREE') {
+                const freeText = document.getElementById(id + 'FreeText');
+                return freeText ? (freeText.value || '(未入力)') : '(未入力)';
+            }
+            return select.value || '';
+        };
+
+        const reportText = `【実績報告】${dateStr}
+
+▼集客
+本日来客数：${document.getElementById('visitorCount').value}人（${document.getElementById('visitorPairs').value}組）
+∟内既存：${document.getElementById('existingCount').value}人
+
+▼SIM
+月間目標：${document.getElementById('simTar').value}件
+月間実績：${getSum('simPrev', 'simToday')}件
+本日実績：${document.getElementById('simToday').value}件
+
+▼オプション
+ひかり
+・月間目標： ${document.getElementById('hikariTar').value}件
+・月間実績： ${getSum('hikariPrev', 'hikariToday')}件
+・本日実績： ${document.getElementById('hikariToday').value}件
+（本日獲得のトーク・事例）
+・${getTalk('hikari')}
+
+Turbo
+・月間目標： ${document.getElementById('turboTar').value}件
+・月間実績： ${getSum('turboPrev', 'turboToday')}件
+・本日実績： ${document.getElementById('turboToday').value}件
+（本日獲得のトーク・事例）
+・${getTalk('turbo')}
+
+カード
+・月間目標： ${document.getElementById('cardTar').value}件
+・月間実績： ${getSum('cardPrev', 'cardToday')}件
+・本日実績： ${document.getElementById('cardToday').value}件
+（本日獲得のトーク・事例）
+・${document.getElementById('cardTalk').value || ''}
+
+かけ放題
+・月間目標： ${document.getElementById('kakeTar').value}件
+・月間実績： ${getSum('kakePrev', 'kakeToday')}件
+・本日実績： ${document.getElementById('kakeToday').value}件
+（本日獲得のトーク・事例）
+・${document.getElementById('kakeTalk').value || ''}
+
+最強保護
+・月間目標： ${document.getElementById('hogoTar').value}件
+・月間実績： ${getSum('hogoPrev', 'hogoToday')}件
+・本日実績： ${document.getElementById('hogoToday').value}件
+（本日獲得のトーク・事例）
+・${document.getElementById('hogoTalk').value || ''}`;
+
+        document.getElementById('outputText').innerText = reportText;
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('outputText').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('コピーしました！');
+        });
+    }
+</script>
+
+</body>
+</html>
