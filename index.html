@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>楽天モバイル 日報作成ツール（自動読込版）</title>
+    <title>楽天モバイル 日報作成ツール</title>
     <style>
         :root {
             --rakuten-pink: #bf0000;
@@ -95,7 +95,6 @@
             border-radius: 6px;
             cursor: pointer;
             margin-top: 15px;
-            transition: background 0.2s;
         }
         .btn:active {
             background-color: #990000;
@@ -242,7 +241,6 @@
     const today = new Date();
     document.getElementById('reportDate').value = today.toISOString().split('T')[0];
 
-    // 自由入力欄の表示切り替え
     function toggleCustom(id) {
         const select = document.getElementById(id + 'Talk');
         const freeArea = document.getElementById(id + 'FreeArea');
@@ -284,7 +282,6 @@
             return (Number(document.getElementById(prevId).value) || 0) + (Number(document.getElementById(todayId).value) || 0);
         };
 
-        // トーク例の取得（自由入力対応版）
         const getTalk = (id) => {
             const select = document.getElementById(id + 'Talk');
             if (select.value === 'FREE') {
