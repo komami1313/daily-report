@@ -52,17 +52,13 @@
             font-weight: 500;
             font-size: 0.9rem;
         }
-        input[type="number"], input[type="date"], input[type="text"], select, textarea {
+        input[type="number"], input[type="date"], input[type="text"], select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 1rem;
-        }
-        textarea {
-            resize: vertical;
-            height: 100px;
         }
         .grid-3 {
             display: grid;
@@ -101,7 +97,7 @@
         }
         .btn-parse {
             background-color: #333;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .custom-input-area {
             display: none;
@@ -119,9 +115,8 @@
     <h1>日報作成アシスタント</h1>
     
     <div class="form-group">
-        <label style="color: var(--rakuten-pink); font-weight: bold;">【1】前日の報告テキストをここに貼り付け</label>
-        <textarea id="pastReport" placeholder="前日の日報テキストを丸ごとここにペーストしてください"></textarea>
-        <button class="btn btn-parse" onclick="parsePastReport()">前日の実績を読み込む</button>
+        <label style="color: var(--rakuten-pink); font-weight: bold;">【1】まず前日の実績を読み込みます</label>
+        <button class="btn btn-parse" onclick="parsePastReportPrompt()">ここをタップして前日の日報を貼り付ける</button>
     </div>
 
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
@@ -279,30 +274,27 @@
         }
     }
 
-    function parsePastReport() {
-        const text = document.getElementById('pastReport').value;
+    // スマホのセキュリティガードを完全に回避するポップアップ入力方式
+    function parsePastReportPrompt() {
+        const text = prompt('ここに前日の日報テキストを貼り付けて「OK」を押してください：');
         if (!text) {
-            alert('前日の日報テキストを入力してください。');
+            if (text === '') alert('テキストが入力されませんでした。');
             return;
         }
 
-        // 各キーワードの「直後」にある月間実績の数値をピンポイントで狙い撃ちする（順番に依存しない）
         const extractNum = (blockKeyword) => {
             const blockIndex = text.indexOf(blockKeyword);
             if (blockIndex === -1) return 0;
             
-            // キーワード以降のテキストを切り出し、そこから最初に出てくる「月間実績」の行を探す
             const afterBlockText = text.substring(blockIndex);
             const targetIndex = afterBlockText.indexOf('月間実績：');
             if (targetIndex === -1) return 0;
             
-            // 「月間実績：」のすぐ後ろの数字を抜き出す
             const numText = afterBlockText.substring(targetIndex, targetIndex + 30);
             const match = numText.match(/\d+/);
             return match ? Number(match[0]) : 0;
         };
 
-        // 各項目を名前で狙い撃ち
         document.getElementById('simPrev').value = extractNum('▼SIM');
         document.getElementById('hikariPrev').value = extractNum('ひかり');
         document.getElementById('turboPrev').value = extractNum('Turbo');
@@ -310,7 +302,7 @@
         document.getElementById('kakePrev').value = extractNum('かけ放題');
         document.getElementById('hogoPrev').value = extractNum('最強保護');
 
-        alert('前日の実績数値を読み込みました！');
+        alert('前日の実績数値を正常に読み込みました！');
     }
 
     function generateReport() {
