@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>楽天モバイル 日報作成ツール</title>
+    <title>楽天モバイル 日報作成ツール（自動読込版）</title>
     <style>
         :root {
             --rakuten-pink: #bf0000;
@@ -52,13 +52,17 @@
             font-weight: 500;
             font-size: 0.9rem;
         }
-        input[type="number"], input[type="date"], select {
+        input[type="number"], input[type="date"], select, textarea {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
             box-sizing: border-box;
             font-size: 1rem;
+        }
+        textarea {
+            resize: vertical;
+            height: 100px;
         }
         .grid-3 {
             display: grid;
@@ -96,6 +100,10 @@
         .btn:active {
             background-color: #990000;
         }
+        .btn-parse {
+            background-color: #333;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -104,29 +112,37 @@
     <h1>日報作成アシスタント</h1>
     
     <div class="form-group">
-        <label>報告日付</label>
+        <label style="color: var(--rakuten-pink); font-weight: bold;">【1】前日の報告テキストをここに貼り付け</label>
+        <textarea id="pastReport" placeholder="前日の日報テキストを丸ごとここにペーストしてください"></textarea>
+        <button class="btn btn-parse" onclick="parsePastReport()">前日の実績を読み込む</button>
+    </div>
+
+    <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+    <div class="form-group">
+        <label>【2】報告日付</label>
         <input type="date" id="reportDate">
     </div>
 
-    <div class="section-title">▼集客</div>
+    <div class="section-title">▼集客（本日分のみ入力）</div>
     <div class="grid-3">
-        <div class="form-group"><label>本日来客数</label><input type="number" id="visitorCount" value="10"></div>
-        <div class="form-group"><label>来客組数</label><input type="number" id="visitorPairs" value="8"></div>
-        <div class="form-group"><label>内既存人数</label><input type="number" id="existingCount" value="2"></div>
+        <div class="form-group"><label>本日来客数</label><input type="number" id="visitorCount" value="0"></div>
+        <div class="form-group"><label>来客組数</label><input type="number" id="visitorPairs" value="0"></div>
+        <div class="form-group"><label>内既存人数</label><input type="number" id="existingCount" value="0"></div>
     </div>
 
     <div class="section-title">▼SIM</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="simTar" value="187"></div>
-        <div class="form-group"><label>前日迄実績</label><input type="number" id="simPrev" value="170"></div>
-        <div class="form-group"><label>本日実績</label><input type="number" id="simToday" value="5"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="simPrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="simToday" value="0"></div>
     </div>
 
     <div class="section-title">▼オプション：ひかり</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="hikariTar" value="8"></div>
-        <div class="form-group"><label>前日迄実績</label><input type="number" id="hikariPrev" value="4"></div>
-        <div class="form-group"><label>本日実績</label><input type="number" id="hikariToday" value="1"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="hikariPrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="hikariToday" value="0"></div>
     </div>
     <div class="form-group">
         <label>獲得トーク・事例</label>
@@ -140,7 +156,7 @@
     <div class="section-title">▼オプション：Turbo</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="turboTar" value="5"></div>
-        <div class="form-group"><label>前日迄実績</label><input type="number" id="turboPrev" value="3"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="turboPrev" value="0" readonly style="background: #e9ecef;"></div>
         <div class="form-group"><label>本日実績</label><input type="number" id="turboToday" value="0"></div>
     </div>
     <div class="form-group">
@@ -155,7 +171,7 @@
     <div class="section-title">▼オプション：カード</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="cardTar" value="37"></div>
-        <div class="form-group"><label>前日迄実績</label><input type="number" id="cardPrev" value="24"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="cardPrev" value="0" readonly style="background: #e9ecef;"></div>
         <div class="form-group"><label>本日実績</label><input type="number" id="cardToday" value="0"></div>
     </div>
     <div class="form-group">
@@ -170,8 +186,8 @@
     <div class="section-title">▼オプション：かけ放題</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="kakeTar" value="100"></div>
-        <div class="form-group"><label>前日迄実績</label><input type="number" id="kakePrev" value="18"></div>
-        <div class="form-group"><label>本日実績</label><input type="number" id="kakeToday" value="2"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="kakePrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="kakeToday" value="0"></div>
     </div>
     <div class="form-group">
         <label>獲得トーク・事例</label>
@@ -185,8 +201,8 @@
     <div class="section-title">▼オプション：最強保護</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="hogoTar" value="63"></div>
-        <div class="form-group"><label>前日迄実績</label><input type="number" id="hogoPrev" value="26"></div>
-        <div class="form-group"><label>本日実績</label><input type="number" id="hogoToday" value="2"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="hogoPrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="hogoToday" value="0"></div>
     </div>
     <div class="form-group">
         <label>獲得トーク・事例</label>
@@ -197,20 +213,44 @@
         </select>
     </div>
 
-    <button class="btn" onclick="generateReport()">日報テキストを生成</button>
+    <button class="btn" onclick="generateReport()">【3】本日分の日報テキストを生成</button>
 
     <div class="output-area">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <strong>【生成された日報】</strong>
+            <strong>【生成された最新日報】</strong>
             <button onclick="copyToClipboard()" style="padding: 4px 8px; font-size: 0.8rem; cursor: pointer;">コピー</button>
         </div>
-        <pre id="outputText">「日報テキストを生成」を押すとここに表示されます</pre>
+        <pre id="outputText">「本日分の日報テキストを生成」を押すとここに表示されます</pre>
     </div>
 </div>
 
 <script>
     const today = new Date();
     document.getElementById('reportDate').value = today.toISOString().split('T')[0];
+
+    function parsePastReport() {
+        const text = document.getElementById('pastReport').value;
+        if (!text) {
+            alert('前日の日報テキストを入力してください。');
+            return;
+        }
+
+        const simMatch = text.match(/▼SIM[\s\S]*?月間実績：\s*(\d+)件/);
+        const hikariMatch = text.match(/ひかり[\s\S]*?月間実績：\s*(\d+)件/);
+        const turboMatch = text.match(/Turbo[\s\S]*?月間実績：\s*(\d+)件/);
+        const cardMatch = text.match(/カード[\s\S]*?月間実績：\s*(\d+)件/);
+        const kakeMatch = text.match(/かけ放題[\s\S]*?月間実績：\s*(\d+)件/);
+        const hogoMatch = text.match(/最強保護[\s\S]*?月間実績：\s*(\d+)件/);
+
+        document.getElementById('simPrev').value = simMatch ? simMatch[1] : 0;
+        document.getElementById('hikariPrev').value = hikariMatch ? hikariMatch[1] : 0;
+        document.getElementById('turboPrev').value = turboMatch ? turboMatch[1] : 0;
+        document.getElementById('cardPrev').value = cardMatch ? cardMatch[1] : 0;
+        document.getElementById('kakePrev').value = kakeMatch ? kakeMatch[1] : 0;
+        document.getElementById('hogoPrev').value = hogoMatch ? hogoMatch[1] : 0;
+
+        alert('前日の実績数値を読み込みました！続けて本日実績を入力してください。');
+    }
 
     function generateReport() {
         const dateInput = new Date(document.getElementById('reportDate').value);
@@ -273,7 +313,7 @@ Turbo
     function copyToClipboard() {
         const text = document.getElementById('outputText').innerText;
         navigator.clipboard.writeText(text).then(() => {
-            alert('日報をクリップボードにコピーしました！');
+            alert('最新の日報をクリップボードにコピーしました！');
         }).catch(err => {
             alert('コピーに失敗しました。枠内のテキストを長押ししてコピーしてください。');
         });
