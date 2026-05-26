@@ -179,4 +179,243 @@
             <option value="引っ越しが多いと伺ったので、ひかりよりTurboの方が引っ越しの手続きが手軽。">引っ越し手続きの手軽さ訴求</option>
             <option value="工事不要ですぐ利用できる。">工事不要・即日利用訴求</option>
             <option value="配線のごちゃつきを気にされていたので、ひかりと違ってTurboは配線が1本なので線がごちゃつくことがなく、部屋がすっきりするのでおすすめと話して獲得。">配線すっきり・部屋の美観訴求</option>
-            <option value="モバイル、カード、ターボで
+            <option value="モバイル、カード、ターボでSPU9倍、楽天市場で1万円分お買い物すると900ポイントも付与されるので、楽天でまとめるメリットを話して獲得。">SPU9倍・楽天市場まとめメリット訴求</option>
+            <option value="FREE">その他（自由入力）</option>
+        </select>
+        <div id="turboFreeArea" class="custom-input-area">
+            <label>自由入力欄（Turbo）</label>
+            <input type="text" id="turboFreeText" placeholder="獲得事例を自由に入力してください">
+        </div>
+    </div>
+
+    <div class="section-title">▼オプション：カード</div>
+    <div class="grid-3">
+        <div class="form-group"><label>月間目標</label><input type="number" id="cardTar" value="37"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="cardPrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="cardToday" value="0"></div>
+    </div>
+    <div class="form-group">
+        <label>獲得トーク・事例</label>
+        <select id="cardTalk" onchange="toggleCustom('card')">
+            <option value="">-- 選択してください --</option>
+            <option value="楽天カード1枚だけ所持と伺ったので、破損や不正利用されてカードが使えなくなった時のリスクを伝え、2枚目の提案をして獲得。">1枚所持のリスク・2枚目提案</option>
+            <option value="楽天カードのデザインを変更希望のお客様に2枚目を提案して獲得。">デザイン変更希望への2枚目提案</option>
+            <option value="今後は楽天市場を利用してみたいと伺ったので、SPUについて説明して獲得。">楽天市場利用希望へのSPU訴求</option>
+            <option value="発行手数料、年会費無料。">発行手数料・年会費無料訴求</option>
+            <option value="FREE">その他（自由入力）</option>
+        </select>
+        <div id="cardFreeArea" class="custom-input-area">
+            <label>自由入力欄（カード）</label>
+            <input type="text" id="cardFreeText" placeholder="獲得事例を自由に入力してください">
+        </div>
+    </div>
+
+    <div class="section-title">▼オプション：かけ放題</div>
+    <div class="grid-3">
+        <div class="form-group"><label>月間目標</label><input type="number" id="kakeTar" value="100"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="kakePrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="kakeToday" value="0"></div>
+    </div>
+    <div class="form-group">
+        <label>獲得トーク・事例</label>
+        <select id="kakeTalk" onchange="toggleCustom('kake')">
+            <option value="">-- 選択してください --</option>
+            <option value="Apple Watchから通話を沢山されるならオススメ。">Apple Watchからの通話利用</option>
+            <option value="通話の録音をしたいと伺い、楽天リンクでは録音機能が利用できないことを説明し、通話を沢山されるとのことだったので獲得。">録音希望へのLink仕様説明・獲得</option>
+            <option value="ご年配の方だったので、かけ間違えた時の通話料高額のリスクを伝え獲得。">かけ間違い時の通話料高額リスク訴求</option>
+            <option value="通話品質維持のため。">通話品質維持のため</option>
+            <option value="FREE">その他（自由入力）</option>
+        </select>
+        <div id="kakeFreeArea" class="custom-input-area">
+            <label>自由入力欄（かけ放題）</label>
+            <input type="text" id="kakeFreeText" placeholder="獲得事例を自由に入力してください">
+        </div>
+    </div>
+
+    <div class="section-title">▼オプション：最強保護</div>
+    <div class="grid-3">
+        <div class="form-group"><label>月間目標</label><input type="number" id="hogoTar" value="63"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="hogoPrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="hogoToday" value="0"></div>
+    </div>
+    <div class="form-group">
+        <label>獲得トーク・事例</label>
+        <select id="hogoTalk" onchange="toggleCustom('hogo')">
+            <option value="">-- 選択してください --</option>
+            <option value="過去の個人情報漏洩についてもお調べが可能。">個人情報漏洩チェックの訴求</option>
+            <option value="乗り換え元のキャリアでもノートンなどを利用していたとお伺いしたため。">前キャリアでのセキュリティ利用継続</option>
+            <option value="FREE">その他（自由入力）</option>
+        </select>
+        <div id="hogoFreeArea" class="custom-input-area">
+            <label>自由入力欄（最強保護）</label>
+            <input type="text" id="hogoFreeText" placeholder="獲得事例を自由に入力してください">
+        </div>
+    </div>
+
+    <button class="btn" onclick="generateReport()">【3】本日分の日報テキストを生成</button>
+
+    <div class="output-area">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <strong>【生成された最新日報】</strong>
+            <button onclick="copyToClipboard()" style="padding: 4px 8px; font-size: 0.8rem; cursor: pointer;">コピー</button>
+        </div>
+        <pre id="outputText">「本日分の日報テキストを生成」を押すとここに表示されます</pre>
+    </div>
+</div>
+
+<script>
+    const today = new Date();
+    document.getElementById('reportDate').value = today.toISOString().split('T')[0];
+
+    function toggleCustom(id) {
+        const select = document.getElementById(id + 'Talk');
+        const freeArea = document.getElementById(id + 'FreeArea');
+        if (select && freeArea) {
+            if (select.value === 'FREE') {
+                freeArea.style.display = 'block';
+            } else {
+                freeArea.style.display = 'none';
+            }
+        }
+    }
+
+    function parsePastReport() {
+        const text = document.getElementById('pastReport').value;
+        if (!text) {
+            alert('前日の日報テキストを入力してください。');
+            return;
+        }
+
+        // 各キーワードの「直後」にある月間実績の数値をピンポイントで狙い撃ちする（順番に依存しない）
+        const extractNum = (blockKeyword) => {
+            const blockIndex = text.indexOf(blockKeyword);
+            if (blockIndex === -1) return 0;
+            
+            // キーワード以降のテキストを切り出し、そこから最初に出てくる「月間実績」の行を探す
+            const afterBlockText = text.substring(blockIndex);
+            const targetIndex = afterBlockText.indexOf('月間実績：');
+            if (targetIndex === -1) return 0;
+            
+            // 「月間実績：」のすぐ後ろの数字を抜き出す
+            const numText = afterBlockText.substring(targetIndex, targetIndex + 30);
+            const match = numText.match(/\d+/);
+            return match ? Number(match[0]) : 0;
+        };
+
+        // 各項目を名前で狙い撃ち
+        document.getElementById('simPrev').value = extractNum('▼SIM');
+        document.getElementById('hikariPrev').value = extractNum('ひかり');
+        document.getElementById('turboPrev').value = extractNum('Turbo');
+        document.getElementById('cardPrev').value = extractNum('カード');
+        document.getElementById('kakePrev').value = extractNum('かけ放題');
+        document.getElementById('hogoPrev').value = extractNum('最強保護');
+
+        alert('前日の実績数値を読み込みました！');
+    }
+
+    function generateReport() {
+        const dateInput = new Date(document.getElementById('reportDate').value);
+        const dateStr = (dateInput.getMonth() + 1) + '月' + dateInput.getDate() + '日';
+
+        const getNumValue = (id) => {
+            const val = document.getElementById(id).value;
+            return val ? (Number(val) || 0) : 0;
+        };
+
+        const visitorCount = document.getElementById('visitorCount').value || 0;
+        const visitorPairs = document.getElementById('visitorPairs').value || 0;
+        const existingCount = document.getElementById('existingCount').value || 0;
+
+        const simTar = document.getElementById('simTar').value || 0;
+        const simPrev = getNumValue('simPrev');
+        const simToday = getNumValue('simToday');
+
+        const hikariTar = document.getElementById('hikariTar').value || 0;
+        const hikariPrev = getNumValue('hikariPrev');
+        const hikariToday = getNumValue('hikariToday');
+
+        const turboTar = document.getElementById('turboTar').value || 0;
+        const turboPrev = getNumValue('turboPrev');
+        const turboToday = getNumValue('turboToday');
+
+        const cardTar = document.getElementById('cardTar').value || 0;
+        const cardPrev = getNumValue('cardPrev');
+        const cardToday = getNumValue('cardToday');
+
+        const kakeTar = document.getElementById('kakeTar').value || 0;
+        const kakePrev = getNumValue('kakePrev');
+        const kakeToday = getNumValue('kakeToday');
+
+        const hogoTar = document.getElementById('hogoTar').value || 0;
+        const hogoPrev = getNumValue('hogoPrev');
+        const hogoToday = getNumValue('hogoToday');
+
+        const getTalkText = (id) => {
+            const sel = document.getElementById(id + 'Talk');
+            if (!sel) return '';
+            if (sel.value === 'FREE') {
+                const freeTxt = document.getElementById(id + 'FreeText');
+                return freeTxt ? (freeTxt.value || '(未入力)') : '(未入力)';
+            }
+            return sel.value || '';
+        };
+
+        const hikariText = getTalkText('hikari');
+        const turboText = getTalkText('turbo');
+        const cardText = getTalkText('card');
+        const kakeText = getTalkText('kake');
+        const hogoText = getTalkText('hogo');
+
+        const reportText = '【実績報告】' + dateStr + '\n\n' +
+'▼集客\n' +
+'本日来客数：' + visitorCount + '人（' + visitorPairs + '組）\n' +
+'∟内既存：' + existingCount + '人\n\n' +
+'▼SIM\n' +
+'月間目標：' + simTar + '件\n' +
+'月間実績：' + (simPrev + simToday) + '件\n' +
+'本日実績：' + simToday + '件\n\n' +
+'▼オプション\n' +
+'ひかり\n' +
+'・月間目標： ' + hikariTar + '件\n' +
+'・月間実績： ' + (hikariPrev + hikariToday) + '件\n' +
+'・本日実績： ' + hikariToday + '件\n' +
+'（本日獲得のトーク・事例）\n' +
+'・' + hikariText + '\n\n' +
+'Turbo\n' +
+'・月間目標： ' + turboTar + '件\n' +
+'・月間実績： ' + (turboPrev + turboToday) + '件\n' +
+'・本日実績： ' + turboToday + '件\n' +
+'（本日獲得のトーク・事例）\n' +
+'・' + turboText + '\n\n' +
+'カード\n' +
+'・月間目標： ' + cardTar + '件\n' +
+'・月間実績： ' + (cardPrev + cardToday) + '件\n' +
+'・本日実績： ' + cardToday + '件\n' +
+'（本日獲得のトーク・事例）\n' +
+'・' + cardText + '\n\n' +
+'かけ放題\n' +
+'・月間目標： ' + kakeTar + '件\n' +
+'・月間実績： ' + (kakePrev + kakeToday) + '件\n' +
+'・本日実績： ' + kakeToday + '件\n' +
+'（本日獲得のトーク・事例）\n' +
+'・' + kakeText + '\n\n' +
+'最強保護\n' +
+'・月間目標： ' + hogoTar + '件\n' +
+'・月間実績： ' + (hogoPrev + hogoToday) + '件\n' +
+'・本日実績： ' + hogoToday + '件\n' +
+'（本日獲得のトーク・事例）\n' +
+'・' + hogoText;
+
+        document.getElementById('outputText').innerText = reportText;
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('outputText').innerText;
+        navigator.clipboard.writeText(text).then(function() {
+            alert('コピーしました！');
+        });
+    }
+</script>
+
+</body>
+</html>
