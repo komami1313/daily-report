@@ -161,7 +161,7 @@
             <option value="FREE">その他（自由入力）</option>
         </select>
         <div id="hikariFreeArea" class="custom-input-area">
-            <label>自由入力欄</label>
+            <label>自由入力欄（ひかり）</label>
             <input type="text" id="hikariFreeText" placeholder="獲得事例を自由に入力してください">
         </div>
     </div>
@@ -174,11 +174,18 @@
     </div>
     <div class="form-group">
         <label>獲得トーク・事例</label>
-        <select id="turboTalk">
+        <select id="turboTalk" onchange="toggleCustom('turbo')">
             <option value="">-- 選択してください --</option>
-            <option value="コンセントに挿すだけですぐにWi-Fiが使えるので、工事を待てない方にぴったりです。">手軽さ：工事不要・即日利用のメリット訴求</option>
-            <option value="お引っ越し直後で即日使いたいとのことで、手軽さに魅力を感じていただけました。">手軽さ：引っ越し時の手続き不要をアピール</option>
+            <option value="引っ越しが多いと伺ったので、ひかりよりTurboの方が引っ越しの手続きが手軽。">引っ越し手続きの手軽さ訴求</option>
+            <option value="工事不要ですぐ利用できる。">工事不要・即日利用訴求</option>
+            <option value="配線のごちゃつきを気にされていたので、ひかりと違ってTurboは配線が1本なので線がごちゃつくことがなく、部屋がすっきりするのでおすすめと話して獲得。">配線すっきり・部屋の美観訴求</option>
+            <option value="モバイル、カード、ターボでSPU9倍、楽天市場で1万円分お買い物すると900ポイントも付与されるので、楽天でまとめるメリットを話して獲得。">SPU9倍・楽天市場まとめメリット訴求</option>
+            <option value="FREE">その他（自由入力）</option>
         </select>
+        <div id="turboFreeArea" class="custom-input-area">
+            <label>自由入力欄（Turbo）</label>
+            <input type="text" id="turboFreeText" placeholder="獲得事例を自由に入力してください">
+        </div>
     </div>
 
     <div class="section-title">▼オプション：カード</div>
@@ -279,74 +286,4 @@
         const dateStr = `${dateInput.getMonth() + 1}月${dateInput.getDate()}日`;
 
         const getSum = (prevId, todayId) => {
-            return (Number(document.getElementById(prevId).value) || 0) + (Number(document.getElementById(todayId).value) || 0);
-        };
-
-        const getTalk = (id) => {
-            const select = document.getElementById(id + 'Talk');
-            if (select.value === 'FREE') {
-                return document.getElementById(id + 'FreeText').value || '(未入力)';
-            }
-            return select.value || '';
-        };
-
-        const reportText = `【実績報告】${dateStr}
-
-▼集客
-本日来客数：${document.getElementById('visitorCount').value}人（${document.getElementById('visitorPairs').value}組）
-∟内既存：${document.getElementById('existingCount').value}人
-
-▼SIM
-月間目標：${document.getElementById('simTar').value}件
-月間実績：${getSum('simPrev', 'simToday')}件
-本日実績：${document.getElementById('simToday').value}件
-
-▼オプション
-ひかり
-・月間目標： ${document.getElementById('hikariTar').value}件
-・月間実績： ${getSum('hikariPrev', 'hikariToday')}件
-・本日実績： ${document.getElementById('hikariToday').value}件
-（本日獲得のトーク・事例）
-・${getTalk('hikari')}
-
-Turbo
-・月間目標： ${document.getElementById('turboTar').value}件
-・月間実績： ${getSum('turboPrev', 'turboToday')}件
-・本日実績： ${document.getElementById('turboToday').value}件
-（本日獲得のトーク・事例）
-・${document.getElementById('turboTalk').value || ''}
-
-カード
-・月間目標： ${document.getElementById('cardTar').value}件
-・月間実績： ${getSum('cardPrev', 'cardToday')}件
-・本日実績： ${document.getElementById('cardToday').value}件
-（本日獲得のトーク・事例）
-・${document.getElementById('cardTalk').value || ''}
-
-かけ放題
-・月間目標： ${document.getElementById('kakeTar').value}件
-・月間実績： ${getSum('kakePrev', 'kakeToday')}件
-・本日実績： ${document.getElementById('kakeToday').value}件
-（本日獲得のトーク・事例）
-・${document.getElementById('kakeTalk').value || ''}
-
-最強保護
-・月間目標： ${document.getElementById('hogoTar').value}件
-・月間実績： ${getSum('hogoPrev', 'hogoToday')}件
-・本日実績： ${document.getElementById('hogoToday').value}件
-（本日獲得のトーク・事例）
-・${document.getElementById('hogoTalk').value || ''}`;
-
-        document.getElementById('outputText').innerText = reportText;
-    }
-
-    function copyToClipboard() {
-        const text = document.getElementById('outputText').innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            alert('コピーしました！');
-        });
-    }
-</script>
-
-</body>
-</html>
+            return (Number(document.getElementById(prevId).
