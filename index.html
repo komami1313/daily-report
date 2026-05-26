@@ -237,4 +237,92 @@
 
     <div class="output-area">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <strong>【生成された最新日報】
+            <strong>【生成された最新日報】</strong>
+            <button onclick="copyToClipboard()" style="padding: 4px 8px; font-size: 0.8rem; cursor: pointer;">コピー</button>
+        </div>
+        <pre id="outputText">「本日分の日報テキストを生成」を押すとここに表示されます</pre>
+    </div>
+</div>
+
+<script>
+    const today = new Date();
+    document.getElementById('reportDate').value = today.toISOString().split('T')[0];
+
+    function toggleCustom(id) {
+        const select = document.getElementById(id + 'Talk');
+        const freeArea = document.getElementById(id + 'FreeArea');
+        if (select && freeArea) {
+            if (select.value === 'FREE') {
+                freeArea.style.display = 'block';
+            } else {
+                freeArea.style.display = 'none';
+            }
+        }
+    }
+
+    function parsePastReport() {
+        const text = document.getElementById('pastReport').value;
+        if (!text) {
+            alert('前日の日報テキストを入力してください。');
+            return;
+        }
+        const simMatch = text.match(/▼SIM[\s\S]*?月間実績：\s*(\d+)件/);
+        const hikariMatch = text.match(/ひかり[\s\S]*?月間実績：\s*(\d+)件/);
+        const turboMatch = text.match(/Turbo[\s\S]*?月間実績：\s*(\d+)件/);
+        const cardMatch = text.match(/カード[\s\S]*?月間実績：\s*(\d+)件/);
+        const kakeMatch = text.match(/かけ放題[\s\S]*?月間実績：\s*(\d+)件/);
+        const hogoMatch = text.match(/最強保護[\s\S]*?月間実績：\s*(\d+)件/);
+
+        document.getElementById('simPrev').value = simMatch ? simMatch[1] : 0;
+        document.getElementById('hikariPrev').value = hikariMatch ? hikariMatch[1] : 0;
+        document.getElementById('turboPrev').value = turboMatch ? turboMatch[1] : 0;
+        document.getElementById('cardPrev').value = cardMatch ? cardMatch[1] : 0;
+        document.getElementById('kakePrev').value = kakeMatch ? kakeMatch[1] : 0;
+        document.getElementById('hogoPrev').value = hogoMatch ? hogoMatch[1] : 0;
+
+        alert('前日の実績数値を読み込みました！');
+    }
+
+    function generateReport() {
+        const dateInput = new Date(document.getElementById('reportDate').value);
+        const dateStr = (dateInput.getMonth() + 1) + '月' + dateInput.getDate() + '日';
+
+        // 数値の計算
+        const simSum = (Number(document.getElementById('simPrev').value) || 0) + (Number(document.getElementById('simToday').value) || 0);
+        const hikariSum = (Number(document.getElementById('hikariPrev').value) || 0) + (Number(document.getElementById('hikariToday').value) || 0);
+        const turboSum = (Number(document.getElementById('turboPrev').value) || 0) + (Number(document.getElementById('turboToday').value) || 0);
+        const cardSum = (Number(document.getElementById('cardPrev').value) || 0) + (Number(document.getElementById('cardToday').value) || 0);
+        const kakeSum = (Number(document.getElementById('kakePrev').value) || 0) + (Number(document.getElementById('kakeToday').value) || 0);
+        const hogoSum = (Number(document.getElementById('hogoPrev').value) || 0) + (Number(document.getElementById('hogoToday').value) || 0);
+
+        // ひかりトーク取得
+        let hikariText = '';
+        const hikariSel = document.getElementById('hikariTalk');
+        if (hikariSel) {
+            if (hikariSel.value === 'FREE') {
+                hikariText = document.getElementById('hikariFreeText').value || '(未入力)';
+            } else {
+                hikariText = hikariSel.value || '';
+            }
+        }
+
+        // Turboトーク取得
+        let turboText = '';
+        const turboSel = document.getElementById('turboTalk');
+        if (turboSel) {
+            if (turboSel.value === 'FREE') {
+                turboText = document.getElementById('turboFreeText').value || '(未入力)';
+            } else {
+                turboText = turboSel.value || '';
+            }
+        }
+
+        // その他のトーク取得
+        const cardText = document.getElementById('cardTalk').value || '';
+        const kakeText = document.getElementById('kakeTalk').value || '';
+        const hogoText = document.getElementById('hogoTalk').value || '';
+
+        // テキスト合体
+        const reportText = '【実績報告】' + dateStr + '\n\n' +
+'▼集客\n' +
+'本日来客数：'
