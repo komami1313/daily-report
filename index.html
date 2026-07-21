@@ -282,6 +282,9 @@
         }
 
         // 数値を抽出する汎用関数（「月間実績：」用と「月間目標：」用の2パターンに対応）
+        // ※ blockKeyword は見出し行を一意に特定するため、前後に改行を含めて渡す
+        //   （例: '\nカード\n'）。これにより、獲得トーク文中に同じ単語が
+        //   含まれていても誤ってマッチしないようにする。
         const extractNum = (blockKeyword, targetKeyword) => {
             const blockIndex = text.indexOf(blockKeyword);
             if (blockIndex === -1) return null;
@@ -296,30 +299,31 @@
         };
 
         // 前日迄累計（月間実績）の読み込み
-        document.getElementById('simPrev').value = extractNum('▼SIM', '月間実績：') || 0;
-        document.getElementById('hikariPrev').value = extractNum('ひかり', '月間実績：') || 0;
-        document.getElementById('turboPrev').value = extractNum('Turbo', '月間実績：') || 0;
-        document.getElementById('cardPrev').value = extractNum('カード', '月間実績：') || 0;
-        document.getElementById('kakePrev').value = extractNum('かけ放題', '月間実績：') || 0;
-        document.getElementById('hogoPrev').value = extractNum('最強保護', '月間実績：') || 0;
+        // 見出し行を改行付きで指定し、獲得トーク文中の同一単語との誤マッチを防止
+        document.getElementById('simPrev').value = extractNum('\n▼SIM\n', '月間実績：') || 0;
+        document.getElementById('hikariPrev').value = extractNum('\nひかり\n', '月間実績：') || 0;
+        document.getElementById('turboPrev').value = extractNum('\nTurbo\n', '月間実績：') || 0;
+        document.getElementById('cardPrev').value = extractNum('\nカード\n', '月間実績：') || 0;
+        document.getElementById('kakePrev').value = extractNum('\nかけ放題\n', '月間実績：') || 0;
+        document.getElementById('hogoPrev').value = extractNum('\n最強保護\n', '月間実績：') || 0;
 
         // 【新機能】日報に書いてある月間目標も自動で読み込んで上書きする
-        const simTarVal = extractNum('▼SIM', '月間目標：');
+        const simTarVal = extractNum('\n▼SIM\n', '月間目標：');
         if (simTarVal !== null) document.getElementById('simTar').value = simTarVal;
 
-        const hikariTarVal = extractNum('ひかり', '月間目標：');
+        const hikariTarVal = extractNum('\nひかり\n', '月間目標：');
         if (hikariTarVal !== null) document.getElementById('hikariTar').value = hikariTarVal;
 
-        const turboTarVal = extractNum('Turbo', '月間目標：');
+        const turboTarVal = extractNum('\nTurbo\n', '月間目標：');
         if (turboTarVal !== null) document.getElementById('turboTar').value = turboTarVal;
 
-        const cardTarVal = extractNum('カード', '月間目標：');
+        const cardTarVal = extractNum('\nカード\n', '月間目標：');
         if (cardTarVal !== null) document.getElementById('cardTar').value = cardTarVal;
 
-        const kakeTarVal = extractNum('かけ放題', '月間目標：');
+        const kakeTarVal = extractNum('\nかけ放題\n', '月間目標：');
         if (kakeTarVal !== null) document.getElementById('kakeTar').value = kakeTarVal;
 
-        const hogoTarVal = extractNum('最強保護', '月間目標：');
+        const hogoTarVal = extractNum('\n最強保護\n', '月間目標：');
         if (hogoTarVal !== null) document.getElementById('hogoTar').value = hogoTarVal;
 
         alert('前日の実績数値、および月間目標数を正常に読み込みました！');
