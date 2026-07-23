@@ -107,6 +107,59 @@
             border: 1px solid #ffc0cb;
             border-radius: 6px;
         }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+        .modal-box h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: var(--rakuten-pink);
+        }
+        #pasteTextarea {
+            width: 100%;
+            height: 40vh;
+            min-height: 200px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 0.95rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .modal-btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .modal-btn-row .btn {
+            margin-top: 0;
+        }
+        .btn-cancel {
+            background-color: #999;
+        }
     </style>
 </head>
 <body>
@@ -116,7 +169,7 @@
     
     <div class="form-group">
         <label style="color: var(--rakuten-pink); font-weight: bold;">【1】まず前日の実績を読み込みます</label>
-        <button class="btn btn-parse" onclick="parsePastReportPrompt()">ここをタップして前日の日報を貼り付ける</button>
+        <button class="btn btn-parse" onclick="openPasteModal()">ここをタップして前日の日報を貼り付ける</button>
     </div>
 
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
@@ -258,6 +311,17 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="pasteModal">
+    <div class="modal-box">
+        <h2>前日の日報を貼り付けてください</h2>
+        <textarea id="pasteTextarea" placeholder="ここに前日の日報テキストを貼り付け（ペースト）してください"></textarea>
+        <div class="modal-btn-row">
+            <button class="btn btn-cancel" onclick="closePasteModal()">キャンセル</button>
+            <button class="btn" onclick="parsePastReportText()">読み込む</button>
+        </div>
+    </div>
+</div>
+
 <script>
     const today = new Date();
     document.getElementById('reportDate').value = today.toISOString().split('T')[0];
@@ -274,12 +338,34 @@
         }
     }
 
-    function parsePastReportPrompt() {
-        const text = prompt('ここに前日の日報テキストを貼り付けて「OK」を押してください：');
-        if (!text) {
-            if (text === '') alert('テキストが入力されませんでした。');
+    function openPasteModal() {
+        document.getElementById('pasteTextarea').value = '';
+        document.getElementById('pasteModal').classList.add('active');
+        // iOSでキーボードが自動で出るようフォーカスする
+        setTimeout(function() {
+            document.getElementById('pasteTextarea').focus();
+        }, 100);
+    }
+
+    function closePasteModal() {
+        document.getElementById('pasteModal').classList.remove('active');
+    }
+
+    function parsePastReportText() {
+        // textareaの値は改行(\n)がOS・機種に関わらず正しく保持されるため、
+        // iPhoneのSafariでも問題なく複数行のまま取得できる
+        let text = document.getElementById('pasteTextarea').value;
+
+        if (!text || !text.trim()) {
+            alert('テキストが入力されていません。前日の日報を貼り付けてから「読み込む」を押してください。');
             return;
         }
+
+        // 念のため、iOSのオートコレクトで紛れ込む可能性のある
+        // CR(\r)やCRLF(\r\n)を通常のLF(\n)に統一しておく
+        text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+        closePasteModal();
 
         // 数値を抽出する汎用関数（「月間実績：」用と「月間目標：」用の2パターンに対応）
         // ※ blockKeyword は見出し行を一意に特定するため、前後に改行を含めて渡す
