@@ -43,6 +43,12 @@
             padding-left: 8px;
             margin: 20px 0 10px 0;
         }
+        .sub-section-title {
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: var(--rakuten-pink);
+            margin: 15px 0 8px 0;
+        }
         .form-group {
             margin-bottom: 15px;
         }
@@ -63,6 +69,11 @@
         .grid-3 {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
         .output-area {
@@ -98,14 +109,6 @@
         .btn-parse {
             background-color: #333;
             margin-bottom: 20px;
-        }
-        .custom-input-area {
-            display: none;
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #fff9fb;
-            border: 1px solid #ffc0cb;
-            border-radius: 6px;
         }
         .modal-overlay {
             display: none;
@@ -166,7 +169,7 @@
 
 <div class="container">
     <h1>日報作成アシスタント</h1>
-    
+
     <div class="form-group">
         <label style="color: var(--rakuten-pink); font-weight: bold;">【1】まず前日の実績を読み込みます</label>
         <button class="btn btn-parse" onclick="openPasteModal()">ここをタップして前日の日報を貼り付ける</button>
@@ -175,7 +178,12 @@
     <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
 
     <div class="form-group">
-        <label>【2】報告日付</label>
+        <label>【2】店舗名</label>
+        <input type="text" id="storeName" placeholder="例：博多店">
+    </div>
+
+    <div class="form-group">
+        <label>報告日付</label>
         <input type="date" id="reportDate">
     </div>
 
@@ -186,6 +194,12 @@
         <div class="form-group"><label>内既存人数</label><input type="number" id="existingCount" value="0"></div>
     </div>
 
+    <div class="sub-section-title">∟U12発掘（子ども）</div>
+    <div class="grid-2">
+        <div class="form-group"><label>月間発掘件数（前日迄累計）</label><input type="number" id="u12Prev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日発掘件数</label><input type="number" id="u12Today" value="0"></div>
+    </div>
+
     <div class="section-title">▼SIM</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="simTar" value="213"></div>
@@ -193,47 +207,11 @@
         <div class="form-group"><label>本日実績</label><input type="number" id="simToday" value="0"></div>
     </div>
 
-    <div class="section-title">▼オプション：ひかり</div>
+    <div class="section-title">▼オプション：ひかり＋Turbo</div>
     <div class="grid-3">
-        <div class="form-group"><label>月間目標</label><input type="number" id="hikariTar" value="9"></div>
-        <div class="form-group"><label>前日迄累計</label><input type="number" id="hikariPrev" value="0" readonly style="background: #e9ecef;"></div>
-        <div class="form-group"><label>本日実績</label><input type="number" id="hikariToday" value="0"></div>
-    </div>
-    <div class="form-group">
-        <label>獲得トーク・事例</label>
-        <select id="hikariTalk" onchange="toggleCustom('hikari')">
-            <option value="">-- 選択してください --</option>
-            <option value="工事費のポイント還元と毎月のポイント還元をフックに獲得。">工事費・毎月のポイント還元訴求</option>
-            <option value="モバイル、カード、ひかりでSPU9倍、楽天市場で1万円分お買い物すると900ポイントも付与されるので、楽天でまとめるメリットを話して獲得。">SPU9倍・楽天市場まとめメリット訴求</option>
-            <option value="オンラインゲームやリモート会議のラグが少ないので、テザリングよりひかりがおすすめと話して獲得。">品質重視（ゲーム・リモート会議）訴求</option>
-            <option value="FREE">その他（自由入力）</option>
-        </select>
-        <div id="hikariFreeArea" class="custom-input-area">
-            <label>自由入力欄（ひかり）</label>
-            <input type="text" id="hikariFreeText" placeholder="獲得事例を自由に入力してください">
-        </div>
-    </div>
-
-    <div class="section-title">▼オプション：Turbo</div>
-    <div class="grid-3">
-        <div class="form-group"><label>月間目標</label><input type="number" id="turboTar" value="6"></div>
-        <div class="form-group"><label>前日迄累計</label><input type="number" id="turboPrev" value="0" readonly style="background: #e9ecef;"></div>
-        <div class="form-group"><label>本日実績</label><input type="number" id="turboToday" value="0"></div>
-    </div>
-    <div class="form-group">
-        <label>獲得トーク・事例</label>
-        <select id="turboTalk" onchange="toggleCustom('turbo')">
-            <option value="">-- 選択してください --</option>
-            <option value="引っ越しが多いと伺ったので、ひかりよりTurboの方が引っ越しの手続きが手軽。">引っ越し手続きの手軽さ訴求</option>
-            <option value="工事不要ですぐ利用できる。">工事不要・即日利用訴求</option>
-            <option value="配線のごちゃつきを気にされていたので、ひかりと違ってTurboは配線が1本なので線がごちゃつくことがなく、部屋がすっきりするのでおすすめと話して獲得。">配線すっきり・部屋の美観訴求</option>
-            <option value="モバイル、カード、ターボでSPU9倍、楽天市場で1万円分お買い物すると900ポイントも付与されるので、楽天でまとめるメリットを話して獲得。">SPU9倍・楽天市場まとめメリット訴求</option>
-            <option value="FREE">その他（自由入力）</option>
-        </select>
-        <div id="turboFreeArea" class="custom-input-area">
-            <label>自由入力欄（Turbo）</label>
-            <input type="text" id="turboFreeText" placeholder="獲得事例を自由に入力してください">
-        </div>
+        <div class="form-group"><label>月間目標</label><input type="number" id="hikariTurboTar" value="15"></div>
+        <div class="form-group"><label>前日迄累計</label><input type="number" id="hikariTurboPrev" value="0" readonly style="background: #e9ecef;"></div>
+        <div class="form-group"><label>本日実績</label><input type="number" id="hikariTurboToday" value="0"></div>
     </div>
 
     <div class="section-title">▼オプション：カード</div>
@@ -243,19 +221,8 @@
         <div class="form-group"><label>本日実績</label><input type="number" id="cardToday" value="0"></div>
     </div>
     <div class="form-group">
-        <label>獲得トーク・事例</label>
-        <select id="cardTalk" onchange="toggleCustom('card')">
-            <option value="">-- 選択してください --</option>
-            <option value="楽天カード1枚だけ所持と伺ったので、破損や不正利用されてカードが使えなくなった時のリスクを伝え、2枚目の提案をして獲得。">1枚所持のリスク・2枚目提案</option>
-            <option value="楽天カードのデザインを変更希望のお客様に2枚目を提案して獲得。">デザイン変更希望への2枚目提案</option>
-            <option value="今後は楽天市場を利用してみたいと伺ったので、SPUについて説明して獲得。">楽天市場利用希望へのSPU訴求</option>
-            <option value="発行手数料、年会費無料。">発行手数料・年会費無料訴求</option>
-            <option value="FREE">その他（自由入力）</option>
-        </select>
-        <div id="cardFreeArea" class="custom-input-area">
-            <label>自由入力欄（カード）</label>
-            <input type="text" id="cardFreeText" placeholder="獲得事例を自由に入力してください">
-        </div>
+        <label>内カード2枚目（本日）</label>
+        <input type="number" id="cardSecondToday" value="0">
     </div>
 
     <div class="section-title">▼オプション：かけ放題</div>
@@ -264,40 +231,12 @@
         <div class="form-group"><label>前日迄累計</label><input type="number" id="kakePrev" value="0" readonly style="background: #e9ecef;"></div>
         <div class="form-group"><label>本日実績</label><input type="number" id="kakeToday" value="0"></div>
     </div>
-    <div class="form-group">
-        <label>獲得トーク・事例</label>
-        <select id="kakeTalk" onchange="toggleCustom('kake')">
-            <option value="">-- 選択してください --</option>
-            <option value="Apple Watchから通話を沢山されるならオススメ。">Apple Watchからの通話利用</option>
-            <option value="通話の録音をしたいと伺い、楽天リンクでは録音機能が利用できないことを説明し、通話を沢山されるとのことだったので獲得。">録音希望へのLink仕様説明・獲得</option>
-            <option value="ご年配の方だったので、かけ間違えた時の通話料高額のリスクを伝え獲得。">かけ間違い時の通話料高額リスク訴求</option>
-            <option value="通話品質維持のため。">通話品質維持のため</option>
-            <option value="FREE">その他（自由入力）</option>
-        </select>
-        <div id="kakeFreeArea" class="custom-input-area">
-            <label>自由入力欄（かけ放題）</label>
-            <input type="text" id="kakeFreeText" placeholder="獲得事例を自由に入力してください">
-        </div>
-    </div>
 
     <div class="section-title">▼オプション：最強保護</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="hogoTar" value="108"></div>
         <div class="form-group"><label>前日迄累計</label><input type="number" id="hogoPrev" value="0" readonly style="background: #e9ecef;"></div>
         <div class="form-group"><label>本日実績</label><input type="number" id="hogoToday" value="0"></div>
-    </div>
-    <div class="form-group">
-        <label>獲得トーク・事例</label>
-        <select id="hogoTalk" onchange="toggleCustom('hogo')">
-            <option value="">-- 選択してください --</option>
-            <option value="過去の個人情報漏洩についてもお調べが可能。">個人情報漏洩チェックの訴求</option>
-            <option value="乗り換え元のキャリアでもノートンなどを利用していたとお伺いしたため。">前キャリアでのセキュリティ利用継続</option>
-            <option value="FREE">その他（自由入力）</option>
-        </select>
-        <div id="hogoFreeArea" class="custom-input-area">
-            <label>自由入力欄（最強保護）</label>
-            <input type="text" id="hogoFreeText" placeholder="獲得事例を自由に入力してください">
-        </div>
     </div>
 
     <button class="btn" onclick="generateReport()">【3】本日分の日報テキストを生成</button>
@@ -325,18 +264,6 @@
 <script>
     const today = new Date();
     document.getElementById('reportDate').value = today.toISOString().split('T')[0];
-
-    function toggleCustom(id) {
-        const select = document.getElementById(id + 'Talk');
-        const freeArea = document.getElementById(id + 'FreeArea');
-        if (select && freeArea) {
-            if (select.value === 'FREE') {
-                freeArea.style.display = 'block';
-            } else {
-                freeArea.style.display = 'none';
-            }
-        }
-    }
 
     function openPasteModal() {
         document.getElementById('pasteTextarea').value = '';
@@ -369,39 +296,40 @@
 
         // 数値を抽出する汎用関数（「月間実績：」用と「月間目標：」用の2パターンに対応）
         // ※ blockKeyword は見出し行を一意に特定するため、前後に改行を含めて渡す
-        //   （例: '\nカード\n'）。これにより、獲得トーク文中に同じ単語が
-        //   含まれていても誤ってマッチしないようにする。
         const extractNum = (blockKeyword, targetKeyword) => {
             const blockIndex = text.indexOf(blockKeyword);
             if (blockIndex === -1) return null;
-            
+
             const afterBlockText = text.substring(blockIndex);
             const targetIndex = afterBlockText.indexOf(targetKeyword);
             if (targetIndex === -1) return null;
-            
+
             const numText = afterBlockText.substring(targetIndex, targetIndex + 30);
             const match = numText.match(/\d+/);
             return match ? Number(match[0]) : null;
         };
 
+        // 店舗名の読み込み（1行目「【実績報告】◯月◯日　◯◯店」の末尾から店舗名を抽出）
+        const firstLine = text.split('\n')[0];
+        const storeMatch = firstLine.match(/日[\s　]+(\S.*)$/);
+        if (storeMatch) {
+            document.getElementById('storeName').value = storeMatch[1].trim();
+        }
+
         // 前日迄累計（月間実績）の読み込み
-        // 見出し行を改行付きで指定し、獲得トーク文中の同一単語との誤マッチを防止
+        document.getElementById('u12Prev').value = extractNum('\n∟U12発掘（子ども）\n', '・月間発掘件数：') || 0;
         document.getElementById('simPrev').value = extractNum('\n▼SIM\n', '月間実績：') || 0;
-        document.getElementById('hikariPrev').value = extractNum('\nひかり\n', '月間実績：') || 0;
-        document.getElementById('turboPrev').value = extractNum('\nTurbo\n', '月間実績：') || 0;
+        document.getElementById('hikariTurboPrev').value = extractNum('\nひかり＋Turbo\n', '月間実績：') || 0;
         document.getElementById('cardPrev').value = extractNum('\nカード\n', '月間実績：') || 0;
         document.getElementById('kakePrev').value = extractNum('\nかけ放題\n', '月間実績：') || 0;
         document.getElementById('hogoPrev').value = extractNum('\n最強保護\n', '月間実績：') || 0;
 
-        // 【新機能】日報に書いてある月間目標も自動で読み込んで上書きする
+        // 日報に書いてある月間目標も自動で読み込んで上書きする
         const simTarVal = extractNum('\n▼SIM\n', '月間目標：');
         if (simTarVal !== null) document.getElementById('simTar').value = simTarVal;
 
-        const hikariTarVal = extractNum('\nひかり\n', '月間目標：');
-        if (hikariTarVal !== null) document.getElementById('hikariTar').value = hikariTarVal;
-
-        const turboTarVal = extractNum('\nTurbo\n', '月間目標：');
-        if (turboTarVal !== null) document.getElementById('turboTar').value = turboTarVal;
+        const hikariTurboTarVal = extractNum('\nひかり＋Turbo\n', '月間目標：');
+        if (hikariTurboTarVal !== null) document.getElementById('hikariTurboTar').value = hikariTurboTarVal;
 
         const cardTarVal = extractNum('\nカード\n', '月間目標：');
         if (cardTarVal !== null) document.getElementById('cardTar').value = cardTarVal;
@@ -412,7 +340,7 @@
         const hogoTarVal = extractNum('\n最強保護\n', '月間目標：');
         if (hogoTarVal !== null) document.getElementById('hogoTar').value = hogoTarVal;
 
-        alert('前日の実績数値、および月間目標数を正常に読み込みました！');
+        alert('前日の実績数値、店舗名、および月間目標数を正常に読み込みました！');
     }
 
     function generateReport() {
@@ -424,25 +352,28 @@
             return val ? (Number(val) || 0) : 0;
         };
 
+        const storeName = document.getElementById('storeName').value.trim();
+        const storeSuffix = storeName ? '  　' + storeName : '';
+
         const visitorCount = document.getElementById('visitorCount').value || 0;
         const visitorPairs = document.getElementById('visitorPairs').value || 0;
         const existingCount = document.getElementById('existingCount').value || 0;
+
+        const u12Prev = getNumValue('u12Prev');
+        const u12Today = getNumValue('u12Today');
 
         const simTar = document.getElementById('simTar').value || 0;
         const simPrev = getNumValue('simPrev');
         const simToday = getNumValue('simToday');
 
-        const hikariTar = document.getElementById('hikariTar').value || 0;
-        const hikariPrev = getNumValue('hikariPrev');
-        const hikariToday = getNumValue('hikariToday');
-
-        const turboTar = document.getElementById('turboTar').value || 0;
-        const turboPrev = getNumValue('turboPrev');
-        const turboToday = getNumValue('turboToday');
+        const hikariTurboTar = document.getElementById('hikariTurboTar').value || 0;
+        const hikariTurboPrev = getNumValue('hikariTurboPrev');
+        const hikariTurboToday = getNumValue('hikariTurboToday');
 
         const cardTar = document.getElementById('cardTar').value || 0;
         const cardPrev = getNumValue('cardPrev');
         const cardToday = getNumValue('cardToday');
+        const cardSecondToday = getNumValue('cardSecondToday');
 
         const kakeTar = document.getElementById('kakeTar').value || 0;
         const kakePrev = getNumValue('kakePrev');
@@ -452,61 +383,35 @@
         const hogoPrev = getNumValue('hogoPrev');
         const hogoToday = getNumValue('hogoToday');
 
-        const getTalkText = (id) => {
-            const sel = document.getElementById(id + 'Talk');
-            if (!sel) return '';
-            if (sel.value === 'FREE') {
-                const freeTxt = document.getElementById(id + 'FreeText');
-                return freeTxt ? (freeTxt.value || '(未入力)') : '(未入力)';
-            }
-            return sel.value || '';
-        };
-
-        const hikariText = getTalkText('hikari');
-        const turboText = getTalkText('turbo');
-        const cardText = getTalkText('card');
-        const kakeText = getTalkText('kake');
-        const hogoText = getTalkText('hogo');
-
-        const reportText = '【実績報告】' + dateStr + '\n\n' +
+        const reportText = '【実績報告】' + dateStr + storeSuffix + '\n\n' +
 '▼集客\n' +
 '本日来客数：' + visitorCount + '人（' + visitorPairs + '組）\n' +
-'∟内既存：' + existingCount + '人\n\n' +
+'∟内既存：' + existingCount + '人\n' +
+'∟U12発掘（子ども）\n' +
+'・月間発掘件数： ' + (u12Prev + u12Today) + '件\n' +
+'・本日発掘件数： ' + u12Today + '件\n\n' +
 '▼SIM\n' +
 '月間目標：' + simTar + '件\n' +
 '月間実績：' + (simPrev + simToday) + '件\n' +
 '本日実績：' + simToday + '件\n\n' +
 '▼オプション\n' +
-'ひかり\n' +
-'・月間目標： ' + hikariTar + '件\n' +
-'・月間実績： ' + (hikariPrev + hikariToday) + '件\n' +
-'・本日実績： ' + hikariToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + hikariText + '\n\n' +
-'Turbo\n' +
-'・月間目標： ' + turboTar + '件\n' +
-'・月間実績： ' + (turboPrev + turboToday) + '件\n' +
-'・本日実績： ' + turboToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + turboText + '\n\n' +
+'ひかり＋Turbo\n' +
+'・月間目標： ' + hikariTurboTar + '件\n' +
+'・月間実績： ' + (hikariTurboPrev + hikariTurboToday) + '件\n' +
+'・本日実績： ' + hikariTurboToday + '件\n\n' +
 'カード\n' +
 '・月間目標： ' + cardTar + '件\n' +
 '・月間実績： ' + (cardPrev + cardToday) + '件\n' +
 '・本日実績： ' + cardToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + cardText + '\n\n' +
+'∟内カード2枚目： ' + cardSecondToday + '件\n\n' +
 'かけ放題\n' +
 '・月間目標： ' + kakeTar + '件\n' +
 '・月間実績： ' + (kakePrev + kakeToday) + '件\n' +
-'・本日実績： ' + kakeToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + kakeText + '\n\n' +
+'・本日実績： ' + kakeToday + '件\n\n' +
 '最強保護\n' +
 '・月間目標： ' + hogoTar + '件\n' +
 '・月間実績： ' + (hogoPrev + hogoToday) + '件\n' +
-'・本日実績： ' + hogoToday + '件\n' +
-'（本日獲得のトーク・事例）\n' +
-'・' + hogoText;
+'・本日実績： ' + hogoToday + '件';
 
         document.getElementById('outputText').innerText = reportText;
     }
