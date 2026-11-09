@@ -207,6 +207,12 @@
         <div class="form-group"><label>本日実績</label><input type="number" id="simToday" value="0"></div>
     </div>
 
+    <div class="section-title">▼iPad</div>
+    <div class="grid-2">
+        <div class="form-group"><label>アプローチ数</label><input type="number" id="iPadApproach" value="0"></div>
+        <div class="form-group"><label>販売数</label><input type="number" id="iPadSales" value="0"></div>
+    </div>
+
     <div class="section-title">▼オプション：ひかり＋Turbo</div>
     <div class="grid-3">
         <div class="form-group"><label>月間目標</label><input type="number" id="hikariTurboTar" value="15"></div>
@@ -366,6 +372,9 @@
         const simPrev = getNumValue('simPrev');
         const simToday = getNumValue('simToday');
 
+        const iPadApproach = getNumValue('iPadApproach');
+        const iPadSales = getNumValue('iPadSales');
+
         const hikariTurboTar = document.getElementById('hikariTurboTar').value || 0;
         const hikariTurboPrev = getNumValue('hikariTurboPrev');
         const hikariTurboToday = getNumValue('hikariTurboToday');
@@ -394,6 +403,9 @@
 '月間目標：' + simTar + '件\n' +
 '月間実績：' + (simPrev + simToday) + '件\n' +
 '本日実績：' + simToday + '件\n\n' +
+'▼iPad\n' +
+'アプローチ数：' + iPadApproach + '件\n' +
+'販売数：' + iPadSales + '件\n\n' +
 '▼オプション\n' +
 'ひかり＋Turbo\n' +
 '・月間目標： ' + hikariTurboTar + '件\n' +
