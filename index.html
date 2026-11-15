@@ -209,7 +209,11 @@
 
     <div class="section-title">▼iPad</div>
     <div class="grid-2">
-        <div class="form-group"><label>アプローチ数</label><input type="number" id="iPadApproach" value="0"></div>
+        <div class="form-group"><label>アプローチ数</label><input type="number" id="iPadApproachToday" value="0"></div>
+        <div class="form-group"><label>アプローチ累計数（前日迄累計）</label><input type="number" id="iPadApproachPrev" value="0" readonly style="background: #e9ecef;"></div>
+    </div>
+    <div class="grid-2">
+        <div class="form-group"><label>月内販売見込み数</label><input type="number" id="iPadForecast" value="0"></div>
         <div class="form-group"><label>販売数</label><input type="number" id="iPadSales" value="0"></div>
     </div>
 
@@ -325,6 +329,7 @@
         // 前日迄累計（月間実績）の読み込み
         document.getElementById('u12Prev').value = extractNum('\n∟U12発掘（子ども）\n', '・月間発掘件数：') || 0;
         document.getElementById('simPrev').value = extractNum('\n▼SIM\n', '月間実績：') || 0;
+        document.getElementById('iPadApproachPrev').value = extractNum('\n▼iPad\n', 'アプローチ累計数：') || 0;
         document.getElementById('hikariTurboPrev').value = extractNum('\nひかり＋Turbo\n', '月間実績：') || 0;
         document.getElementById('cardPrev').value = extractNum('\nカード\n', '月間実績：') || 0;
         document.getElementById('kakePrev').value = extractNum('\nかけ放題\n', '月間実績：') || 0;
@@ -372,7 +377,9 @@
         const simPrev = getNumValue('simPrev');
         const simToday = getNumValue('simToday');
 
-        const iPadApproach = getNumValue('iPadApproach');
+        const iPadApproachToday = getNumValue('iPadApproachToday');
+        const iPadApproachPrev = getNumValue('iPadApproachPrev');
+        const iPadForecast = getNumValue('iPadForecast');
         const iPadSales = getNumValue('iPadSales');
 
         const hikariTurboTar = document.getElementById('hikariTurboTar').value || 0;
@@ -404,7 +411,9 @@
 '月間実績：' + (simPrev + simToday) + '件\n' +
 '本日実績：' + simToday + '件\n\n' +
 '▼iPad\n' +
-'アプローチ数：' + iPadApproach + '件\n' +
+'アプローチ数：' + iPadApproachToday + '件\n' +
+'アプローチ累計数：' + (iPadApproachPrev + iPadApproachToday) + '件\n' +
+'月内販売見込み数：' + iPadForecast + '件\n' +
 '販売数：' + iPadSales + '件\n\n' +
 '▼オプション\n' +
 'ひかり＋Turbo\n' +
